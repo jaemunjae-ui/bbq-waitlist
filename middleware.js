@@ -6,6 +6,10 @@ export default function middleware(request) {
   const user = process.env.BASIC_AUTH_USER;
   const pass = process.env.BASIC_AUTH_PASSWORD;
 
+  // Basic Auth is opt-in: if either credential isn't configured, skip the
+  // check instead of locking everyone out with no way to log in.
+  if (!user || !pass) return;
+
   const auth = request.headers.get('authorization');
   if (auth) {
     const [scheme, encoded] = auth.split(' ');
